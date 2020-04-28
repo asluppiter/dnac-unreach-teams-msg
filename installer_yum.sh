@@ -2,10 +2,12 @@
 ##Hermes Raymundo Campos De la Fuente - Overclockers Mexico SA de CV 
 
 echo '###Iniciando instalación..'
-echo '###Actualizando Repos..'
-sudo apt update -y
+echo '###Actualizando Repos y añadiendo EPEL..'
+sudo yum update -y
+sudo yum install epel-release
+sudo yum update -y
 echo '###Instalando dependencias..'
-sudo apt install python3 curl wget nano htop python3-pip -y
+sudo yum install python3 curl wget nano htop -y
 echo '###Dependencias instaladas..'
 echo '###Instalando librerias..'
 sudo pip3 install requests
