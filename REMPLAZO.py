@@ -1,12 +1,13 @@
-# Hermes Raymundo Campos De la Fuente - Overclockes Mexico SA de CV
+# Hermes Raymundo Campos De la Fuente - Overclockers Mexico SA de CV
 # Import de libs necesarias
 import pymsteams
 import requests  # para hacer peticiones HTTP
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
+
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)  # Para ignorar certificados
 
 
-### Obtener Token para auth en API Calls
+### Si se obtiene el token por web
 def sacarToken():
     url = REMPLAZO_DNA_URL
 
@@ -14,7 +15,7 @@ def sacarToken():
     payload = {}
     headers = {
         'Content-Type': 'application/json',
-        'Authorization': REMPLAZO_BASE64 
+        'Authorization': REMPLAZO_BASE64
     }
 
     # Mandar peticion, en motodo POST, con la url, los headers que hicimos, payload en este caso no fue necesario y sin v>
@@ -40,86 +41,72 @@ def obtenerDevices(token):
     # print(response.json())
     return response.json()
 
-
-# Fin verUpdate
-
-def messageBuilder(jsonParseo,i):
+def messageBuilder(jsonParseo):
     REMPLAZO_TEAMS_HOOK
     myMessageSection = pymsteams.cardsection()
-    myMessageSection.title("Resumen")
+    myMessageSection.title("Resumen de devices")
     myMessageSection.text("This is my section text")
     # Pasring del JSON de algunas keys interesantes
     reach = jsonParseo["reachabilityStatus"]
-
     # Imprimir, la lib de pymsteams solo puede enviar un renglon en cada mensaje se hizo un work-around ya que teams soporta formato de texto se creacion secciones por cada mensaje, para que al final se unan todas las secciones y se envie tood como un solo mensaje
-    myMessageSection = pymsteams.cardsection()
-    myMessageSection.title("Resumen")
-    if reach == "Unreachable":
-        nombreDevice = jsonParseo['hostname']
+
+    if reach != "Reachable":
+        hostname = jsonParseo['hostname']
         versionSO = jsonParseo["softwareVersion"]
         softwareType = jsonParseo["softwareType"]
         macAddress = jsonParseo["macAddress"]
-        mgmt = jsonParseo["managementIpAddress"]
+        mgmtIP = jsonParseo["managementIpAddress"]
         pid = jsonParseo["platformId"]
         ses = jsonParseo["series"]
         ces = jsonParseo["collectionStatus"]
 
-#ver foreach
-        if nombreDevice:
-            section1 = pymsteams.cardsection()
-            section1.text("Dispositivo: " + nombreDevice)
-        else:
-            section1 = pymsteams.cardsection
-            section1.text("Dispositivo: NULL")
+        if not hostname:
+            hostname="NULL"
 
-        if versionSO:
-            section2 = pymsteams.cardsection()
-            section2.text("Version de SO: " + versionSO)
-        else:
-            section2 = pymsteams.cardsection()
-            section2.text("Version de SO: NULL")
+        section1 = pymsteams.cardsection()
+        section1.text("Dispositivo: " + hostname)
 
-        if softwareType:
-            section3 = pymsteams.cardsection()
-            section3.text("Tipo de SO: " + softwareType)
-        else:
-            section3 = pymsteams.cardsection()
-            section3.text("Tipo de SO: NULL")
+        if not versionSO:
+            versionSO="NULL"
 
-        if macAddress:
-            section4 = pymsteams.cardsection()
-            section4.text("MAC: " + macAddress)
-        else:
-            section4 = pymsteams.cardsection()
-            section4.text("MAC: NULL")
+        section2 = pymsteams.cardsection()
+        section2.text("Version de SO: " + versionSO)
 
-        if mgmt:
-            section5 = pymsteams.cardsection()
-            section5.text("MGMT IP: " + mgmt)
-        else:
-            section5 = pymsteams.cardsection()
-            section5.text("MGMT IP: NULL")
+        if not softwareType:
+            softwareType="NULL"
 
-        if pid:
-            section6 = pymsteams.cardsection()
-            section6.text("Platform ID: " + pid)
-        else:
-            section6 = pymsteams.cardsection()
-            section6.text("Platform ID: NULL")
+        section3 = pymsteams.cardsection()
+        section3.text("Tipo de SO: " + softwareType)
 
-        if ses:
-            section7 = pymsteams.cardsection()
-            section7.text("Series: " + ses)
-        else:
-            section7 = pymsteams.cardsection()
-            section7.text("Series: NULL")
+        if not macAddress:
+            macAddress="NULL"
 
-        if ces:
-            section8 = pymsteams.cardsection()
-            section8.text("Collection Status: " + ces)
-        else:
-            section8 = pymsteams.cardsection()
-            section8.text("Collection: NULL")
+        section4 = pymsteams.cardsection()
+        section4.text("MAC: " + macAddress)
+
+        if not mgmtIP:
+            mgmtIP="NULL"
+
+        section5 = pymsteams.cardsection()
+        section5.text("MGMT IP: " + mgmtIP)
+
+        if not pid:
+            pid="NULL"
+
+        section6 = pymsteams.cardsection()
+        section6.text("Platform ID: " + pid)
+
+        if not ses:
+            ses="NULL"
+
+        section7 = pymsteams.cardsection()
+        section7.text("Series: " + ses)
+
+        if not ces:
+            ces="NULL"
+
+        section8 = pymsteams.cardsection()
+        section8.text("Collection Status: " + ces)
 
         section9 = pymsteams.cardsection()
         section9.text("El equipo no esta disponible")
@@ -135,18 +122,20 @@ def messageBuilder(jsonParseo,i):
         myTeamsMessage.addSection(section9)
         myTeamsMessage.summary("Test Message")  # Aun que no se vea en el mensaje se ocupa tener, si no marca error
         myTeamsMessage.send()  # Enviar todo el mensaje unido
-        
-        
+
+# Fin verUpdate
 ###Main programa
 def main():
-    print('Iniciando Programa')
+    print('Ejecutando programa')
     print('Generando token')
-    print('Obteniendo resultados, entre mas dispositivos mas tardado')
+    print('Obteniendo resultados y enviando mensajes')
 
     jsonAParsear = obtenerDevices(sacarToken())
 
     for memorySize in jsonAParsear["response"]:
-        messageBuilder(memorySize)
+        estado = memorySize["reachabilityStatus"]
+        if estado != "Reachable":
+            messageBuilder(memorySize)
 
 
 ### Ejecutar programa
