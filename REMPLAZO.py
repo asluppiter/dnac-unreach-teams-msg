@@ -1,4 +1,4 @@
-# Hermes Raymundo Campos De la Fuente - OCMX
+# Hermes Raymundo Campos De la Fuente - Overclockes Mexico SA de CV
 # Import de libs necesarias
 import pymsteams
 import requests  # para hacer peticiones HTTP
@@ -6,7 +6,7 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)  # Para ignorar certificados
 
 
-### Si se obtiene el token por web
+### Obtener Token para auth en API Calls
 def sacarToken():
     url = REMPLAZO_DNA_URL
 
@@ -14,7 +14,7 @@ def sacarToken():
     payload = {}
     headers = {
         'Content-Type': 'application/json',
-        'Authorization': REMPLAZO_BASE64
+        'Authorization': REMPLAZO_BASE64 
     }
 
     # Mandar peticion, en motodo POST, con la url, los headers que hicimos, payload en este caso no fue necesario y sin v>
@@ -135,11 +135,13 @@ def messageBuilder(jsonParseo,i):
         myTeamsMessage.addSection(section9)
         myTeamsMessage.summary("Test Message")  # Aun que no se vea en el mensaje se ocupa tener, si no marca error
         myTeamsMessage.send()  # Enviar todo el mensaje unido
+        
+        
 ###Main programa
 def main():
-    print('Hola, ejecutando programa')
+    print('Iniciando Programa')
     print('Generando token')
-    print('Obteniendo resultados')
+    print('Obteniendo resultados, entre mas dispositivos mas tardado')
 
     jsonAParsear = obtenerDevices(sacarToken())
 
