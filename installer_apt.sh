@@ -1,6 +1,6 @@
 #!/bin/bash/
-##Hermes Raymundo Campos De la Fuente - Overclockers Mexico SA de CV 
 
+##Hermes Raymundo Campos De la Fuente - Overclockers Mexico SA de CV 
 echo '###Iniciando instalación..'
 echo '###Actualizando Repos..'
 sudo apt update -y
@@ -44,4 +44,3 @@ sed -i "s@REMPLAZO_DNA_DEVICES@$dna2@g" REMPLAZO.py
 sed -i "s!REMPLAZO_TEAMS_HOOK!$teams1!g" REMPLAZO.py
 #Renombrar el script
 mv REMPLAZO.py unreach_Message.py
-
