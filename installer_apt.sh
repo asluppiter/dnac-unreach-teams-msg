@@ -1,6 +1,5 @@
 #!/bin/bash/
 
-##Hermes Raymundo Campos De la Fuente - Overclockers Mexico SA de CV 
 echo '###Iniciando instalación..'
 echo '###Actualizando Repos..'
 sudo apt update -y
