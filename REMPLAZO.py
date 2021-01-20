@@ -1,4 +1,3 @@
-# Hermes Raymundo Campos De la Fuente - Overclockers Mexico SA de CV
 # Import de libs necesarias
 import pymsteams
 import requests  # para hacer peticiones HTTP
