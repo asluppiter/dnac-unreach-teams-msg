@@ -6,6 +6,5 @@ Run the bash installer script for dependencies, it will also ask you for the cre
 
 ## Example
 
-![Image of Yaktocat](https://i.imgur.com/Vzl0485.png)
+![Image](https://i.imgur.com/Vzl0485.png)
 
-Contact: hermes.campos@overclockers.com.mx or via a PR / Issue 
